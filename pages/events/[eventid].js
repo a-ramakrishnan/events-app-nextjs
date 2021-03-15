@@ -1,4 +1,6 @@
 import { Fragment } from "react";
+import Head from "next/head";
+
 import {
   getEventById,
   getAllEvents,
@@ -28,6 +30,10 @@ function SingleEventPage({ selectedEvent }) {
 
   return (
     <Fragment>
+      <Head>
+        <title>{event.title}</title>
+        <meta name="description" content={event.description} />
+      </Head>
       <EventSummary title={event.title} />
       <EventLogistics
         date={event.date}

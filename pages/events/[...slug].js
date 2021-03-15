@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import ResultsTitle from "../../components/results-title/results-title";
 import Button from "../../components/ui/button";
 import ErrorAlert from "../../components/error-alert/error-alert";
+import Head from "next/head";
 
 function FilterEvents(props) {
   const [events, setEvents] = useState();
@@ -31,8 +32,19 @@ function FilterEvents(props) {
     }
   }, [data]);
 
+  let pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+    </Head>
+  );
+
   if (!events) {
-    return <p className="center">Loading.....</p>;
+    return (
+      <Fragment>
+        {pageHeadData}
+        <p className="center">Loading.....</p>
+      </Fragment>
+    );
   }
 
   const filteredYear = filterData[0];
@@ -40,6 +52,16 @@ function FilterEvents(props) {
 
   const numYear = +filteredYear;
   const numMonth = +filteredMonth;
+
+  pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta
+        name="description"
+        content={`Events for ${numMonth} - ${numYear}`}
+      />
+    </Head>
+  );
 
   if (
     isNaN(numYear) ||
@@ -52,6 +74,7 @@ function FilterEvents(props) {
   ) {
     return (
       <Fragment>
+        {pageHeadData}
         <ErrorAlert>Invalid filter</ErrorAlert>
         <div className="center">
           <Button link="/events">Show All Events</Button>
@@ -73,6 +96,7 @@ function FilterEvents(props) {
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
       <Fragment>
+        {pageHeadData}
         <ErrorAlert>No events found</ErrorAlert>
         <div className="center">
           <Button link="/events">Show All Events</Button>
@@ -83,6 +107,7 @@ function FilterEvents(props) {
   const date = new Date(numYear, numMonth - 1);
   return (
     <Fragment>
+      {pageHeadData}
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
     </Fragment>
